@@ -1,0 +1,9 @@
+.calendar-body {
+    display: grid;
+    grid-template-columns: repeat(7, auto);
+    max-width: min-content;
+}
+
+.calendar-body div {
+    padding: 10px;
+}
