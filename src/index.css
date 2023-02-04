@@ -7,3 +7,7 @@
 .calendar-body div {
     padding: 10px;
 }
+
+.unfocus-date {
+    color: red;
+}
