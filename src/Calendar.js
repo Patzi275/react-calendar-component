@@ -1,6 +1,6 @@
 import './Calendar.css';
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
+import { Day, HDay } from './Day';
 
 const tsec = 1000;
 const tmin = tsec * 60;
@@ -20,28 +20,30 @@ function getDaysInMonth(date) {
 
 function getInfo(year, month) {
   const firstMonthDate = new Date(year, month, 1);
-  const nbPrevMonthDay= firstMonthDate.getDay();
   const nbCurrentMonthDay = getDaysInMonth(firstMonthDate);
+  let nbPrevMonthDay= firstMonthDate.getDay();
+  if (nbPrevMonthDay == 0) 
+    nbPrevMonthDay = 6;
+  else
+    nbPrevMonthDay--;
+
   let nbNextMonthDay;
   let nbTotalDay = 42;
   const pt = nbPrevMonthDay + nbCurrentMonthDay;
 
-  const firstDayTime = firstMonthDate.setTime(firstMonthDate.getTime() - tday * nbPrevMonthDay);
+  const firstDayTime = firstMonthDate.setTime(firstMonthDate.getTime() - tday * (nbPrevMonthDay + 1));
   
   if (pt <= 28)
     nbTotalDay = 28;
   else if (pt <= 35)
     nbTotalDay = 35;
 
-  nbNextMonthDay = nbTotalDay - pt;
+  nbNextMonthDay = (nbTotalDay - pt) % 7; //Exp 
 
-  return { firstDayTime, nbPrevMonthDay: nbPrevMonthDay-1, nbCurrentMonthDay, nbNextMonthDay: nbNextMonthDay+1, nbTotalDay };
+  console.log({ firstDayTime, nbPrevMonthDay: nbPrevMonthDay, nbCurrentMonthDay, nbNextMonthDay: nbNextMonthDay, nbTotalDay });
+  return { firstDayTime, nbPrevMonthDay: nbPrevMonthDay, nbCurrentMonthDay, nbNextMonthDay: nbNextMonthDay, nbTotalDay };
 }
 
-/*
-Props:
-  - date : date mise en avant
-*/
 function Calendar(props) {
   let [date, setDate] = useState(props.date || new Date());
   let [displayedMonth, setDisplayedMonth] = useState(props.displayedMonth || date.getMonth()); 
@@ -49,18 +51,36 @@ function Calendar(props) {
   let [state, setState] = useState(getInfo(displayedYear, displayedMonth));
   /* { firstDayTime, nbPrevMonthDay, nbCurrentMonthDay, nbNextMonthDay, nbTotalDay }; */
 
+  useEffect(function () {
+    setState(getInfo(displayedYear, displayedMonth));
+  }, [displayedMonth, displayedYear]);
+
   function handleNextMonth() {
-    
-    let ndate = new Date(date);
-    ndate.setTime(ndate.getTime() + tday*getDaysInMonth(date));
-    setDate(ndate);
+    let monthNum = displayedMonth;
+    let yearNum = displayedYear;
+
+    ++monthNum;
+    if (monthNum >= 12) {
+      monthNum = 0;
+      ++yearNum;
+    }
+
+    setDisplayedMonth(monthNum);
+    setDisplayedYear(yearNum);
   }
 
   function handlePrevMonth() {
-    let ndate = new Date(date);
-    ndate.setTime(ndate.getTime() - tday*getDaysInMonth(date));
-    ndate.setTime(ndate.getTime() - tday*getDaysInMonth(date));
-    setDate(ndate);
+    let monthNum = displayedMonth;
+    let yearNum = displayedYear;
+
+    --monthNum;
+    if (monthNum < 0) {
+      monthNum = 11;
+      --yearNum;
+    }
+
+    setDisplayedMonth(monthNum);
+    setDisplayedYear(yearNum);
   }
 
   function calendarHeader() {
@@ -70,9 +90,9 @@ function Calendar(props) {
         <button>{displayedYear}</button>
       </div>
       <div className="calendar-btn-list">
-        <button>{"<"}</button>
+        <button onClick={handlePrevMonth}>{"<"}</button>
         <button>o</button>
-        <button>{">"}</button>
+        <button onClick={handleNextMonth}>{">"}</button>
       </div>
     </div>);
   }
@@ -85,31 +105,23 @@ function Calendar(props) {
       {
         Array.from({ length: state.nbPrevMonthDay }, function () {
           itDay.nextDay();
-          return (<div className="unfocus-date">
-            {itDay.getDate()}
-          </div>);
+          return <HDay>{itDay.getDate()}</HDay>;
         })
       }
       {
         Array.from({ length: state.nbCurrentMonthDay }, function () {
-          itDay.nextDay();;
-          return (<div>
-            {itDay.getDate()}
-          </div>);
+          itDay.nextDay();
+          return <Day>{itDay.getDate()}</Day>;
         })
       }
       {
         Array.from({ length: state.nbNextMonthDay }, function () {
           itDay.nextDay();
-          return (<div className="unfocus-date">
-            {itDay.getDate()}
-          </div>);
+          return <HDay>{itDay.getDate()}</HDay>;
         })
       }
     </div>);
   }
-
-  console.log(state);
 
   /*Array.from({length: getDaysInMonth(date)}, (_, index) => <div ></div>);*/
 
