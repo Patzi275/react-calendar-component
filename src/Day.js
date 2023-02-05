@@ -1,8 +1,9 @@
 export function Day({children, className}) {
     return (
-        <div className={className}>
-          {(children < 10 ? '0' : '') + children}
-        </div>
+        <a className={className}
+            href="#">
+          {/*(children < 10 ? '0' : '') +*/ children}
+        </a>
     );
 }
 

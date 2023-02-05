@@ -91,7 +91,6 @@ function Calendar(props) {
       </div>
       <div className="calendar-btn-list">
         <button onClick={handlePrevMonth}>{"<"}</button>
-        <button>o</button>
         <button onClick={handleNextMonth}>{">"}</button>
       </div>
     </div>);
@@ -103,21 +102,26 @@ function Calendar(props) {
 
     return (<div className="calendar-body">
       {
-        Array.from({ length: state.nbPrevMonthDay }, function () {
+        ['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((element, index) => <div className='day-name' key={index}>{ element }</div>)
+      }
+      {
+        Array.from({ length: state.nbPrevMonthDay }, function (_, index) {
           itDay.nextDay();
-          return <HDay>{itDay.getDate()}</HDay>;
+          return <HDay key={index}>{itDay.getDate()}</HDay>;
         })
       }
       {
-        Array.from({ length: state.nbCurrentMonthDay }, function () {
+        Array.from({ length: state.nbCurrentMonthDay }, function (_, index) {
           itDay.nextDay();
-          return <Day>{itDay.getDate()}</Day>;
+          if (itDay.toLocaleDateString() === date.toLocaleDateString())
+            return <Day key={index} className='current-day'>{itDay.getDate()}</Day>;
+          return <Day key={index}>{itDay.getDate()}</Day>;
         })
       }
       {
-        Array.from({ length: state.nbNextMonthDay }, function () {
+        Array.from({ length: state.nbNextMonthDay }, function (_, index) {
           itDay.nextDay();
-          return <HDay>{itDay.getDate()}</HDay>;
+          return <HDay key={index}>{itDay.getDate()}</HDay>;
         })
       }
     </div>);
