@@ -1,3 +1,9 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 .calendar {
     max-width: min-content;
     font-family: lato, Arial, Helvetica, sans-serif;
@@ -13,7 +19,7 @@
 .calendar-header button {
     border: none;
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 00;
     padding: 5px 8px;
     background-color: unset;
     cursor: pointer;
@@ -23,15 +29,31 @@
     background-color:rgb(226, 226, 226);
 }
 
-.month-year button {
-    border: 1px solid rgb(170, 170, 170);
+.month-year select {
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    padding: 0 1em 0 0;
+    margin: 0;
+    width: 100%;
+    font-size: inherit;
+    cursor: inherit;
+    line-height: inherit;
 }
 
-.month-year button:nth-child(1) {
+.month-year select {
+    border: 1px solid rgb(170, 170, 170);
+    width: min-content;
+    padding: 5px;
+    font-size: large;
+    font-weight: 500;
+}
+
+.month-year select:nth-child(1) {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
 }
-.month-year button:nth-child(2) {
+.month-year select:nth-child(2) {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     border-left: none;

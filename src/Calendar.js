@@ -86,8 +86,19 @@ function Calendar(props) {
   function calendarHeader() {
     return (<div className="calendar-header">
       <div className="month-year">
-        <button>{getMonthName(displayedMonth)}</button>
-        <button>{displayedYear}</button>
+        <select>
+          <option>{getMonthName(displayedMonth)}</option>
+          <option>Autre</option>
+          {
+            Array.from({length: 12}, )
+          }
+        </select>
+        <select>
+          <option selected>{displayedYear}</option>
+          {
+            Array.from({length: 30}, (_, i) => <option>{2000 + i}</option>)
+          }
+        </select>
       </div>
       <div className="calendar-btn-list">
         <button onClick={handlePrevMonth}>{"<"}</button>
