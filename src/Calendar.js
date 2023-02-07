@@ -1,6 +1,8 @@
 import './Calendar.css';
 import React, { useState, useEffect } from 'react';
 import { Day, HDay } from './Day';
+import './Selector';
+import Selector from './Selector';
 
 const tsec = 1000;
 const tmin = tsec * 60;
@@ -40,7 +42,6 @@ function getInfo(year, month) {
 
   nbNextMonthDay = (nbTotalDay - pt) % 7; //Exp 
 
-  console.log({ firstDayTime, nbPrevMonthDay: nbPrevMonthDay, nbCurrentMonthDay, nbNextMonthDay: nbNextMonthDay, nbTotalDay });
   return { firstDayTime, nbPrevMonthDay: nbPrevMonthDay, nbCurrentMonthDay, nbNextMonthDay: nbNextMonthDay, nbTotalDay };
 }
 
@@ -83,22 +84,29 @@ function Calendar(props) {
     setDisplayedYear(yearNum);
   }
 
+  function handleChangeMonth(month) {
+    setDisplayedMonth(month);
+  }
+
+  function handleChangeYear(year) {
+    setDisplayedYear(year);
+  }
+
   function calendarHeader() {
+    let currentYear = date.getFullYear();
+
     return (<div className="calendar-header">
       <div className="month-year">
-        <select>
-          <option>{getMonthName(displayedMonth)}</option>
-          <option>Autre</option>
-          {
-            Array.from({length: 12}, )
-          }
-        </select>
-        <select>
-          <option selected>{displayedYear}</option>
-          {
-            Array.from({length: 30}, (_, i) => <option>{2000 + i}</option>)
-          }
-        </select>
+        <Selector 
+          elements={Array.from({length: 12}, (_, index) => ({label: getMonthName(index), value: index}))}
+          selected={displayedMonth}
+          onChange={handleChangeMonth}
+        />
+        <Selector 
+          elements={Array.from({length: 11}, (_, index) => ({label: currentYear - 1 + index, value: currentYear - 1 + index}))}
+          selected={displayedYear}
+          onChange={handleChangeYear}
+        />
       </div>
       <div className="calendar-btn-list">
         <button onClick={handlePrevMonth}>{"<"}</button>
