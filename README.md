@@ -1,5 +1,6 @@
 # React Calendar
 <img src="assets/calendar.png" style="width: 40%; margin: 10px 30%;"></img>
+
 This is a simple React Calendar component that displays a monthly calendar and allows users to interact with the calendar by clicking on a date.
 
 ## Features
