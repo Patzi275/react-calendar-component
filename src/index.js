@@ -8,6 +8,7 @@ root.render(
   <React.StrictMode>
     <Calendar 
       date={new Date(2023, 1, 1)}
+      onDateClick={e => console.log("Clicked:", e)}
     />
   </React.StrictMode>
 );

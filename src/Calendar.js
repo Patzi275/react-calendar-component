@@ -48,7 +48,7 @@ function getInfo(year, month) {
 function Calendar(props) {
   let [date, setDate] = useState(props.date || new Date());
   let [displayedMonth, setDisplayedMonth] = useState(props.displayedMonth || date.getMonth()); 
-  let [displayedYear, setDisplayedYear] = useState(props.displayedMonth || date.getFullYear()); 
+  let [displayedYear, setDisplayedYear] = useState(props.displayedYear || date.getFullYear()); 
   let [state, setState] = useState(getInfo(displayedYear, displayedMonth));
   /* { firstDayTime, nbPrevMonthDay, nbCurrentMonthDay, nbNextMonthDay, nbTotalDay }; */
 
@@ -92,6 +92,10 @@ function Calendar(props) {
     setDisplayedYear(year);
   }
 
+  function handleDateClick(date) {
+    props.onDateClick(new Date(displayedYear, displayedMonth, date));
+  }
+
   function calendarHeader() {
     let currentYear = date.getFullYear();
 
@@ -117,30 +121,31 @@ function Calendar(props) {
 
   function calendarBody() {
     let itDay = new Date(state.firstDayTime);
+    let it = 0;
     itDay.nextDay = () => itDay.setTime(itDay.getTime() + tday);
 
     return (<div className="calendar-body">
       {
-        ['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((element, index) => <div className='day-name' key={index}>{ element }</div>)
+        ['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((element, index) => <div className='day-name' key={it++}>{ element }</div>)
       }
       {
         Array.from({ length: state.nbPrevMonthDay }, function (_, index) {
           itDay.nextDay();
-          return <HDay key={index}>{itDay.getDate()}</HDay>;
+          return <HDay key={it++} onClick={handleDateClick}>{itDay.getDate()}</HDay>;
         })
       }
       {
         Array.from({ length: state.nbCurrentMonthDay }, function (_, index) {
           itDay.nextDay();
           if (itDay.toLocaleDateString() === date.toLocaleDateString())
-            return <Day key={index} className='current-day'>{itDay.getDate()}</Day>;
-          return <Day key={index}>{itDay.getDate()}</Day>;
+            return <Day key={it++} className='current-day' onClick={handleDateClick}>{itDay.getDate()}</Day>;
+          return <Day key={it++} onClick={handleDateClick}>{itDay.getDate()}</Day>;
         })
       }
       {
         Array.from({ length: state.nbNextMonthDay }, function (_, index) {
           itDay.nextDay();
-          return <HDay key={index}>{itDay.getDate()}</HDay>;
+          return <HDay key={it++} onClick={handleDateClick}>{itDay.getDate()}</HDay>;
         })
       }
     </div>);
