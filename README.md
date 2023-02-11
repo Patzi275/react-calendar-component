@@ -64,3 +64,4 @@ This project is open for contributions. If you have any suggestions or ideas, fe
 
 ## License
 This project is licensed under the MIT license.
+
